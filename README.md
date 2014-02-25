@@ -1,4 +1,3 @@
-function-queue
-==============
+# qmap
 
 Async function map and queue
