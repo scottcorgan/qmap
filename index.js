@@ -1,5 +1,6 @@
 var flatten = require('flatten');
 var drainer = require('drainer');
+var isArguments = require('lodash.isarguments');
 
 var Qmap = function (context) {
   
@@ -20,7 +21,7 @@ Qmap.prototype.push = function () {
   
   // Handles any type of argument, include function's arguments variable
   flatten(args.map(function (arg) {
-    if (arg.callee) return [].slice.call(arg, 0);
+    if (isArguments(arg)) return [].slice.call(arg, 0);
     return arg;
   }))
     .forEach(function (arg) {

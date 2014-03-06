@@ -1,6 +1,6 @@
 {
   "name": "qmap",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Async function map and queue",
   "main": "index.js",
   "scripts": {
@@ -24,7 +24,8 @@
   "homepage": "https://github.com/scottcorgan/qmap",
   "dependencies": {
     "drainer": "0.2.x",
-    "flatten": "0.0.x"
+    "flatten": "0.0.x",
+    "lodash.isarguments": "2.4.x"
   },
   "devDependencies": {
     "mocha": "1.17.x",
