@@ -2,7 +2,7 @@
 
 Async function map and queue.
 
-Create methods and add those methods to queue to be drained later.
+Create methods and add those methods to a queue to be drained later.
 
 ## Install
 
@@ -20,6 +20,11 @@ var queue = new Qmap();
 
 queue.push(function (done) {
   // Do something
+  done();
+});
+
+queue.push(function (done) {
+  // Do something else
   done();
 });
 
