@@ -17,7 +17,7 @@ Adding anonymous functions
 ```js
 var Qmap = requier('qmap');
 var queue = new Qmap();
-// You may pass in an optional context to bind each method to
+// You may pass in an optional context as the first argument to bind each method to
 // when instantiating the constructor
 
 queue.push(function (done) {
