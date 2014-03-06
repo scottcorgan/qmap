@@ -12,12 +12,17 @@ Qmap.prototype.method = function (name, fn) {
 };
 
 Qmap.prototype.push = function () {
-  var args = flatten([].slice.call(arguments, 0));
+  var args = [].slice.call(arguments, 0);
   
-  args.forEach(function (arg) {
-    if (typeof arg === 'string') arg = this._methods[arg];
-    this._items.push(arg);
-  }, this);
+  // Handles any type of argument, include function's arguments variable
+  flatten(args.map(function (arg) {
+    if (arg.callee) return [].slice.call(arg, 0);
+    return arg;
+  }))
+    .forEach(function (arg) {
+      if (typeof arg === 'string') arg = this._methods[arg];
+      this._items.push(arg);
+    }, this);
 };
 
 Qmap.prototype.drain = function () {

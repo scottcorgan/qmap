@@ -44,6 +44,29 @@ describe('adding functions to the queue', function () {
     expect(queue._items.length).to.equal(2);
     expect(queue._items[0]).to.be.a('function');
   });
+  
+  it('adds a functions arguments variable to the queue as an array of functions', function (done) {
+    var called1 = false;
+    var called2 = false;
+    
+    add(function(done) {
+      called1 = true;
+      done();
+    }, function (done) {
+      called2 = true;
+      done()
+    });
+    
+    queue.drain(function () {
+      expect(called1).to.equal(true);
+      expect(called2).to.equal(true);
+      done();
+    });
+    
+    function add () {
+      queue.push(arguments);
+    }
+  });
 });
 
 describe('draining the queue', function () {
@@ -51,6 +74,12 @@ describe('draining the queue', function () {
   
   beforeEach(function () {
     queue = new Qmap();
+  });
+  
+  it('drains an empty queue', function (done) {
+    queue.drain(function () {
+      done();
+    });
   });
   
   it('drains the queue of function only items', function (done) {
