@@ -1,10 +1,13 @@
 var flatten = require('flatten');
 var drainer = require('drainer');
 
-var Qmap = function () {
+var Qmap = function (context) {
+  
   // this._isQueue = true; // TODO: use this so that we can make a queue of queues
+  
   this._items = [];
   this._methods = {};
+  this._context = context;
 };
 
 Qmap.prototype.method = function (name, fn) {
@@ -12,6 +15,7 @@ Qmap.prototype.method = function (name, fn) {
 };
 
 Qmap.prototype.push = function () {
+  var context = this._context;
   var args = [].slice.call(arguments, 0);
   
   // Handles any type of argument, include function's arguments variable
@@ -21,7 +25,12 @@ Qmap.prototype.push = function () {
   }))
     .forEach(function (arg) {
       if (typeof arg === 'string') arg = this._methods[arg];
-      this._items.push(arg);
+      
+      var fn = (context)
+        ? arg.bind(context) // Bind to context
+        : arg;
+        
+      this._items.push(fn);
     }, this);
 };
 

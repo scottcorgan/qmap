@@ -188,4 +188,16 @@ describe('draining the queue', function () {
     
     queue.drain();
   });
+  
+  it('binds a context to each function in the queue', function (done) {
+    var ctx = {name: 'name'};
+    var queue = new Qmap(ctx);
+    
+    queue.push(function (done) {
+      expect(this.name).to.equal('name');
+      done();
+    });
+    
+    queue.drain(done);
+  });
 });
