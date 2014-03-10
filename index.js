@@ -18,21 +18,21 @@ Qmap.prototype.method = function (name, fn) {
 
 Qmap.prototype.push = function () {
   flatten(arguments)
-    .map(unstringify, this)
-    .map(contextify, this)
+    .map(toMethod, this)
+    .map(bindTo, this)
     .forEach(addToItems, this);
   
   function addToItems (arg) {
     this._items.push(arg);
   }
   
-  function unstringify (arg) {
+  function toMethod (arg) {
     return (typeof arg === 'string')
       ? this._methods[arg]
       : arg;
   }
   
-  function contextify (arg) {
+  function bindTo (arg) {
     return (this._context)
       ? arg.bind(this._context)
       : arg;
