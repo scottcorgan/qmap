@@ -1,4 +1,5 @@
-var flatten = require('flatten');
+var flatten = require('flat-arguments');
+var asArray = require('as-array');
 var drainer = require('drainer');
 var isArguments = require('lodash.isarguments');
 
@@ -16,23 +17,17 @@ Qmap.prototype.method = function (name, fn) {
 };
 
 Qmap.prototype.push = function () {
-  var context = this._context;
-  var args = [].slice.call(arguments, 0);
+  flatten(arguments).forEach(addToItems, this);
   
-  // Handles any type of argument, include function's arguments variable
-  flatten(args.map(function (arg) {
-    if (isArguments(arg)) return [].slice.call(arg, 0);
-    return arg;
-  }))
-    .forEach(function (arg) {
-      if (typeof arg === 'string') arg = this._methods[arg];
+  function addToItems (arg) {
+    if (typeof arg === 'string') arg = this._methods[arg];
+    
+    var fn = (this._context)
+      ? arg.bind(this._context)
+      : arg; 
       
-      var fn = (context)
-        ? arg.bind(context) // Bind to context
-        : arg;
-        
-      this._items.push(fn);
-    }, this);
+    this._items.push(fn);
+  }
 };
 
 Qmap.prototype.drain = function () {
