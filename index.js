@@ -17,16 +17,25 @@ Qmap.prototype.method = function (name, fn) {
 };
 
 Qmap.prototype.push = function () {
-  flatten(arguments).forEach(addToItems, this);
+  flatten(arguments)
+    .map(unstringify, this)
+    .map(contextify, this)
+    .forEach(addToItems, this);
   
   function addToItems (arg) {
-    if (typeof arg === 'string') arg = this._methods[arg];
-    
-    var fn = (this._context)
+    this._items.push(arg);
+  }
+  
+  function unstringify (arg) {
+    return (typeof arg === 'string')
+      ? this._methods[arg]
+      : arg;
+  }
+  
+  function contextify (arg) {
+    return (this._context)
       ? arg.bind(this._context)
-      : arg; 
-      
-    this._items.push(fn);
+      : arg;
   }
 };
 
